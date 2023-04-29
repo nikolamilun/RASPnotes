@@ -1,14 +1,14 @@
-import {axios} from 'axios'
+import axios from 'axios'
 
 const BASE_URL = 'http://localhost:3841/api/'
 
-export const ENDPOINTS = {
+const ENDPOINTS = {
     notes : 'Notes',
 }
 
 export const actions = {
-    get: () => axios.get(BASE_URL + notes),
-    post: () => axios.post(BASE_URL + notes, newRecord),
-    patch: () => axios.patch(BASE_URL + notes, newRecord),
-    delete: () => axios.delete(BASE_URL + notes, id)
+    get: () => axios.get(BASE_URL + ENDPOINTS.notes),
+    post: (newRecord) => axios.post(BASE_URL + ENDPOINTS.notes, newRecord),
+    patch: (newRecord) => axios.patch(BASE_URL + ENDPOINTS.notes, newRecord),
+    delete: (id) => axios.delete(BASE_URL + ENDPOINTS.notes, id)
 }
