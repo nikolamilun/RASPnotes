@@ -22,6 +22,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors(builder => builder.WithOrigins("localhost:3000").AllowAnyMethod().AllowAnyHeader());
+
 app.UseAuthorization();
 
 app.MapControllers();
