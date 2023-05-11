@@ -5,7 +5,7 @@ import NotesView from './components/NotesView';
 function App() {
   return (
       <NotesView>
-
+        
       </NotesView>
   );
 }
