@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const BASE_URL = 'http://localhost:3841/api/'
+const BASE_URL = 'http://localhost:5117/api/'
 
 const ENDPOINTS = {
     notes : 'Notes/',
