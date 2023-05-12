@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
+import ContextProvider from './hooks/useStateContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -14,10 +15,12 @@ const darkTheme = createTheme({
   });
 
 root.render(
-    <ThemeProvider theme={darkTheme}>
+    <ContextProvider>
+      <ThemeProvider theme={darkTheme}>
         <App />
         <CssBaseline/>
-    </ThemeProvider>
+      </ThemeProvider>
+    </ContextProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
