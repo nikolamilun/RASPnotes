@@ -1,8 +1,10 @@
 export default function FindNoteWithID(array, id){
-    array.forEach(element => {
+    let returnValue;
+
+    array.forEach((element) => {
         if(element.noteID == id)
-            return element;
+            returnValue = element;
     });
 
-    return null
+    return returnValue;
 }

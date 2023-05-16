@@ -1,5 +1,5 @@
 import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, Icon, Typography } from '@mui/material'
-import React, {useState } from 'react'
+import React, {useEffect, useState } from 'react'
 import Center from './Center'
 import { actions } from '../api'
 import { useNavigate } from 'react-router-dom'
@@ -11,27 +11,40 @@ export default function NotesView() {
   const [notes, setNotes] = useState([])
   const [expanded, setExpanded] = React.useState(false);
   const navigate = useNavigate()
-  const { context, updateContext, resetContext } = useStateContext();
+  const { context, updateContext, resetContext, setContext } = useStateContext();
 
+
+  const refreshView = () => {
+    actions.get()
+    .then((results) => {
+      setNotes(results.data)
+      setContext(results.data)
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  }
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
 
-  const changeChecked = (id, checked) => {
+  const changeChecked = (id) => {
     let oldObj = FindNoteWithID(notes, id);
     let newObj = {
       ...oldObj,
-      noteID: id
+      done: !oldObj.done
     }
     updateContext(oldObj, newObj);
     setNotes(context);
     actions.patch(id, newObj);
+    console.log(context);
   }
 
   const deleteNote = (id) => {
     if (window.confirm('Are you sure that you want to delete this note?') == true) {
       actions.delete(id);
+      refreshView()
     }
   }
 
@@ -43,15 +56,9 @@ export default function NotesView() {
     navigate('/add')
   }
 
-  actions.get()
-  .then((results) => {
-    setNotes(results.data)
-    updateContext(notes)
-  })
-  .catch((err) => {
-    console.log(err);
-  })
-
+  useEffect(() => {
+    refreshView()
+  }, [])
 
   return (
     <Center>
@@ -60,16 +67,15 @@ export default function NotesView() {
         </Typography>
 
         <Box sx={{
-          border: '2px solid white',
+          border: '2px solid blue',
           borderRadius: '1vw 1vw',
           padding: '5px'
           }}>
           {
-            notes.map((item, index) => 
-              <Box sx={{marginBlock: '10px'}} key={index}>
-                <Accordion expanded={expanded === item.noteID} onChange={() => handleChange(item.noteID)}>
+            notes.map((item) => 
+              <Box sx={{marginBlock: '10px'}} key={item.noteID}>
+                <Accordion expanded={expanded === item.noteID} onChange={handleChange(item.noteID)}>
                     <AccordionSummary
-                    expandIcon={<Icon />}
                     aria-controls="panel1bh-content"
                     id="panel1bh-header"
                     >
@@ -86,7 +92,7 @@ export default function NotesView() {
                           {item.text}
                       </Typography>
 
-                      <Checkbox {...item.checked ? 'checked' : ''} onChange={() => changeChecked(item.noteID, item.checked)}/>
+                      <Checkbox checked={item.done} onChange={() => changeChecked(item.noteID, item.checked)}/>
 
                       <Button onClick={() => editNote(item.id)}>Edit</Button>
 

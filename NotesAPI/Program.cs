@@ -15,7 +15,7 @@ builder.Services.AddDbContext<NotesDbContext>(options => options.UseSqlServer(bu
 
 var app = builder.Build();
 
-app.UseCors(builder => builder.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader());
+app.UseCors(builder => builder.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod());
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
