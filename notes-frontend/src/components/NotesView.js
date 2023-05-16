@@ -3,7 +3,7 @@ import React, {useState } from 'react'
 import Center from './Center'
 import { actions } from '../api'
 import { useNavigate } from 'react-router-dom'
-import useStateContext from '../hooks/useStateContext'
+import {useStateContext} from '../hooks/useStateContext'
 import FindNoteWithID from '../helper/Tools'
 
 export default function NotesView() {
@@ -19,7 +19,7 @@ export default function NotesView() {
   };
 
   const changeChecked = (id, checked) => {
-    let oldObj = FindNoteWithID(notes);
+    let oldObj = FindNoteWithID(notes, id);
     let newObj = {
       ...oldObj,
       noteID: id
@@ -65,8 +65,8 @@ export default function NotesView() {
           padding: '5px'
           }}>
           {
-            notes.map((item) => 
-              <Box sx={{marginBlock: '10px'}}>
+            notes.map((item, index) => 
+              <Box sx={{marginBlock: '10px'}} key={index}>
                 <Accordion expanded={expanded === item.noteID} onChange={() => handleChange(item.noteID)}>
                     <AccordionSummary
                     expandIcon={<Icon />}

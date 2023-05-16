@@ -15,7 +15,7 @@ export function useStateContext() {
     return{
         context,
         updateContext: (oldObj, obj) => {
-            context.splice(context.findIndex(oldObj), 1)
+            context.splice(context.find((obj) => oldObj == obj), 1)
             setContext([...context, obj])
         },
         resetContext: () => {
