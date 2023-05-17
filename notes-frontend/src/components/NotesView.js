@@ -17,8 +17,8 @@ export default function NotesView() {
   const refreshView = () => {
     actions.get()
     .then((results) => {
-      setNotes(results.data)
       setContext(results.data)
+      setNotes(results.data)
     })
     .catch((err) => {
       console.log(err);
@@ -29,16 +29,15 @@ export default function NotesView() {
     setExpanded(isExpanded ? panel : false);
   };
 
-  const changeChecked = (id) => {
+  const changeChecked = (id, done) => {
+    console.log(context);
     let oldObj = FindNoteWithID(notes, id);
     let newObj = {
       ...oldObj,
-      done: !oldObj.done
+      done: !done
     }
-    updateContext(oldObj, newObj);
-    setNotes(context);
     actions.patch(id, newObj);
-    console.log(context);
+    refreshView()
   }
 
   const deleteNote = (id) => {
@@ -69,7 +68,10 @@ export default function NotesView() {
         <Box sx={{
           border: '2px solid blue',
           borderRadius: '1vw 1vw',
-          padding: '5px'
+          padding: '5px',
+          display: 'flex',
+          justifyContent: 'center',
+          flexDirection: 'column'
           }}>
           {
             notes.map((item) => 
@@ -78,6 +80,7 @@ export default function NotesView() {
                     <AccordionSummary
                     aria-controls="panel1bh-content"
                     id="panel1bh-header"
+                    sx={{padding: '1vw'}}
                     >
                       <Typography sx={{ width: '33%', flexShrink: 0 }}>
                           {item.header}
@@ -92,11 +95,11 @@ export default function NotesView() {
                           {item.text}
                       </Typography>
 
-                      <Checkbox checked={item.done} onChange={() => changeChecked(item.noteID, item.checked)}/>
+                      <Checkbox checked={item.done} onChange={() => changeChecked(item.noteID, item.done)}/>
 
                       <Button onClick={() => editNote(item.id)}>Edit</Button>
 
-                      <Button color='error' onClick={() => deleteNote(item.id)}>Delete</Button>
+                      <Button color='error' onClick={() => deleteNote(item.noteID)}>Delete</Button>
 
                     </AccordionDetails>
                 </Accordion>
