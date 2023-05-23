@@ -1,4 +1,4 @@
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, Icon, Typography } from '@mui/material'
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, Typography } from '@mui/material'
 import React, {useEffect, useState } from 'react'
 import Center from './Center'
 import { actions } from '../api'
@@ -11,13 +11,12 @@ export default function NotesView() {
   const [notes, setNotes] = useState([])
   const [expanded, setExpanded] = React.useState(false);
   const navigate = useNavigate()
-  const { context, updateContext, resetContext, setContext } = useStateContext();
+  const { context, resetContext, setContext } = useStateContext();
 
 
   const refreshView = () => {
     actions.get()
     .then((results) => {
-      setContext(results.data)
       setNotes(results.data)
     })
     .catch((err) => {
@@ -30,20 +29,23 @@ export default function NotesView() {
   };
 
   const changeChecked = (id, done) => {
-    console.log(context);
     let oldObj = FindNoteWithID(notes, id);
+    let newNotes = [...notes];
     let newObj = {
       ...oldObj,
       done: !done
     }
     actions.patch(id, newObj);
-    refreshView()
+    newNotes.splice(notes.indexOf(oldObj) , 1, newObj)
+    setNotes(newNotes);
   }
 
-  const deleteNote = (id) => {
+  const deleteNote = (item) => {
     if (window.confirm('Are you sure that you want to delete this note?') == true) {
-      actions.delete(id);
-      refreshView()
+      actions.delete(item.noteID);
+      let newNotes = [...notes];
+      newNotes.splice(notes.indexOf(item), 1);
+      setNotes(newNotes)
     }
   }
 
@@ -89,17 +91,25 @@ export default function NotesView() {
 
                     <AccordionDetails sx={{
                       display: 'flex',
-                      alignItems: 'center'
+                      alignItems: 'center',
+                      flexDirection: 'column'
                     }}>
-                      <Typography>
+                      <Typography variant='h6'>
                           {item.text}
                       </Typography>
 
-                      <Checkbox checked={item.done} onChange={() => changeChecked(item.noteID, item.done)}/>
+                      <div>
+                        <Checkbox checked={item.done} onChange={() => changeChecked(item.noteID, item.done)}/>
 
-                      <Button onClick={() => editNote(item.id)}>Edit</Button>
+                        <Button onClick={
+                          () => {
+                            setContext(item)
+                            editNote(item.id)
+                          }
+                        }>Edit</Button>
 
-                      <Button color='error' onClick={() => deleteNote(item.noteID)}>Delete</Button>
+                        <Button color='error' onClick={() => deleteNote(item)}>Delete</Button>
+                      </div>
 
                     </AccordionDetails>
                 </Accordion>

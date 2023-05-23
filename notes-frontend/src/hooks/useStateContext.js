@@ -15,10 +15,6 @@ export function useStateContext() {
     return{
         context,
         setContext,
-        updateContext: (oldObj, obj) => {
-            context.splice(context.indexOf((obj) => oldObj == obj), 1)
-            setContext(context.push(obj))
-        },
         resetContext: () => {
             localStorage.removeItem('context')
             setContext(getFreshContext())
