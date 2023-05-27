@@ -49,7 +49,7 @@ export default function NotesView() {
     }
   }
 
-  const editNote = (id) => {
+  const editNote = () => {
     navigate('/edit')
   }
 
@@ -78,7 +78,8 @@ export default function NotesView() {
           {
             notes.map((item) => 
               <Box sx={{marginBlock: '10px'}} key={item.noteID}>
-                <Accordion expanded={expanded === item.noteID} onChange={handleChange(item.noteID)}>
+                <Accordion expanded={expanded === item.noteID} onChange={handleChange(item.noteID)}
+                sx={{width: '100%'}}>
                     <AccordionSummary
                     aria-controls="panel1bh-content"
                     id="panel1bh-header"
@@ -90,7 +91,9 @@ export default function NotesView() {
                     </AccordionSummary>
 
                     <AccordionDetails sx={{
+                      width: '100%',
                       display: 'flex',
+                      justifyContent: 'center',
                       alignItems: 'center',
                       flexDirection: 'column'
                     }}>
@@ -98,7 +101,7 @@ export default function NotesView() {
                           {item.text}
                       </Typography>
 
-                      <div>
+                      <Box>
                         <Checkbox checked={item.done} onChange={() => changeChecked(item.noteID, item.done)}/>
 
                         <Button onClick={
@@ -109,7 +112,7 @@ export default function NotesView() {
                         }>Edit</Button>
 
                         <Button color='error' onClick={() => deleteNote(item)}>Delete</Button>
-                      </div>
+                      </Box>
 
                     </AccordionDetails>
                 </Accordion>

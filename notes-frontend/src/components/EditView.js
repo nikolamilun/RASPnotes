@@ -1,38 +1,37 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useStateContext } from '../hooks/useStateContext'
 import Center from '../components/Center'
 import { Box, Button, Checkbox, FormControlLabel, FormGroup, TextField, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { CheckBox } from '@mui/icons-material'
 import { actions } from '../api'
+import InputLayout from './InputLayout'
 
 export default function EditView() {
 
   const {context, setContext, resetContext} = useStateContext()
   const navigate = useNavigate();
 
-  let header = context.header, text = context.text, checked = context.checked;
+  let newHeader = context.header, newText = context.text, newChecked = context.done;
 
-  let errors = {headerError: false, textError: false}
+  const [errors, setErrors] = useState({headerError: false, textError: false})
 
   const submit = () => {
-    errors.headerError = (header == '')
-    errors.textError = (text == '')
-    if(errors.headerError || errors.textError)
+    setErrors({headerError: (newHeader == ''), textError: (newText == '')})
+    if(newHeader == '' || newText == '')
       return;
     try {
       let newRecord = {
         noteID: context.noteID,
-        header,
-        text,
-        done: checked
+        header: newHeader,
+        text: newText,
+        done: newChecked
       }
       actions.patch(newRecord.noteID, newRecord)
       resetContext()
       window.alert('Success!')
       navigate('/')
     } catch (error) {
-     alert(`Error: ${error}`) 
+      window.alert(`Error: ${error}`) 
     }
   }
 
@@ -42,28 +41,26 @@ export default function EditView() {
   }, [])
 
   return (
-    <Center>
-      <Box sx={{padding: '3vw', display:'flex',
-       flexDirection: 'column', width: '70%', '*': {
-        marginBlock: '1vw',
-      }}}>
+    <InputLayout>
+      <Typography variant='h3' sx={{marginBlockEnd: '4vw'}}>Note ID: {context.noteID}</Typography>
 
-        <Typography variant='h3'>Note ID: {context.noteID}</Typography>
+      <Typography variant='h6'>Note header:</Typography>
+      <TextField onChange={(v) => newHeader = v.target.value} defaultValue={context.header}
+      error={errors.headerError} helperText='This field is required'></TextField>
 
-        <TextField error = {errors.headerError} label='Note header'>{context.header}</TextField>
+      <Typography variant='h6'>Note text:</Typography>
+      <TextField onChange={(v) => newText = v.target.value} defaultValue={context.text}
+      error={errors.textError} multiline maxRows={4} helperText='This field is required'></TextField>
 
-        <TextField error = {errors.headerError} label='Note text'
-        multiline maxRows={4}>{context.text}</TextField>
+      <FormGroup>
+        <FormControlLabel
+          control={<Checkbox defaultChecked={context.done}
+          onChange={(v) => newChecked = v.target.checked}
+          disableRipple/>}
+        label='Done'/>
+      </FormGroup>
 
-        <FormGroup>
-          <FormControlLabel
-            control={<Checkbox checked={context.checked} disableRipple onChange={() => checked = !checked}/>}
-           label='Done'/>
-        </FormGroup>
-
-        <Button onClick={() => submit()} color ='success' sx={{fontSize: '2vw'}}>Submit</Button>
-
-      </Box>
-    </Center>
+      <Button onClick={() => submit()} color ='success' sx={{fontSize: '2vw'}}>Submit</Button>
+    </InputLayout>
   )
 }
