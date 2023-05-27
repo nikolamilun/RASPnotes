@@ -43,6 +43,9 @@ export default function NotesView() {
   const deleteNote = (item) => {
     if (window.confirm('Are you sure that you want to delete this note?') == true) {
       actions.delete(item.noteID);
+      if (context.noteID == item.noteID) {
+        resetContext()
+      }
       let newNotes = [...notes];
       newNotes.splice(notes.indexOf(item), 1);
       setNotes(newNotes)
@@ -50,6 +53,8 @@ export default function NotesView() {
   }
 
   const editNote = () => {
+    if(FindNoteWithID(notes, context.noteID) == null)
+      navigate('/')
     navigate('/edit')
   }
 

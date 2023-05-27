@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import Center from './Center'
 import { Button, Checkbox, FormControlLabel, FormGroup, TextField, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { actions } from '../api'
@@ -7,7 +6,7 @@ import InputLayout from './InputLayout'
 
 export default function AddView() {
 
-  let header, text, done
+  let header = '', text = '', done
   const [errors, setErrors] = useState({headerError: false, textError: false})
   const navigate = useNavigate()
 
@@ -35,11 +34,11 @@ export default function AddView() {
 
       <Typography variant='h6'>Note header:</Typography>
       <TextField onChange={(v) => header = v.target.value}
-      {...errors.headerError ? 'error' : ''}></TextField>
+      error={errors.headerError}></TextField>
 
       <Typography variant='h6'>Note text:</Typography>
       <TextField onChange={(v) => text = v.target.value}
-      {...errors.textError ? 'error' : ''} multiline maxRows={4}></TextField>
+      error={errors.textError} multiline maxRows={4}></TextField>
 
       <FormGroup>
         <FormControlLabel

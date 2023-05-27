@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useStateContext } from '../hooks/useStateContext'
-import Center from '../components/Center'
-import { Box, Button, Checkbox, FormControlLabel, FormGroup, TextField, Typography } from '@mui/material'
+import { Button, Checkbox, FormControlLabel, FormGroup, TextField, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { actions } from '../api'
 import InputLayout from './InputLayout'
@@ -36,7 +35,7 @@ export default function EditView() {
   }
 
   useEffect( () => {
-    if(context == null)
+    if(context == {})
       navigate('/');
   }, [])
 
