@@ -78,13 +78,14 @@ export default function NotesView() {
           padding: '5px',
           display: 'flex',
           justifyContent: 'center',
-          flexDirection: 'column'
+          flexDirection: 'column',
+          width: '75%'
           }}>
           {
             notes.map((item) => 
-              <Box sx={{marginBlock: '10px'}} key={item.noteID}>
+              <Box sx={{marginBlock: '10px', width: '100%'}} key={item.noteID}>
                 <Accordion expanded={expanded === item.noteID} onChange={handleChange(item.noteID)}
-                sx={{width: '100%'}}>
+                sx={{width: '100%', display: 'flex', justifyContent: 'space-evenly'}}>
                     <AccordionSummary
                     aria-controls="panel1bh-content"
                     id="panel1bh-header"
@@ -96,11 +97,11 @@ export default function NotesView() {
                     </AccordionSummary>
 
                     <AccordionDetails sx={{
-                      width: '100%',
                       display: 'flex',
                       justifyContent: 'center',
                       alignItems: 'center',
-                      flexDirection: 'column'
+                      flexDirection: 'column',
+                      flexGrow: '1'
                     }}>
                       <Typography variant='h6'>
                           {item.text}

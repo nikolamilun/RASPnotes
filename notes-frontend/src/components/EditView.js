@@ -35,7 +35,7 @@ export default function EditView() {
   }
 
   useEffect( () => {
-    if(context == {})
+    if(context.noteID == undefined)
       navigate('/');
   }, [])
 
